@@ -1,0 +1,14 @@
+Package: behaviourchange
+Type: Package
+Title: Behaviour change Shiny app
+Version: 0.1.0
+Author: Ty Stanford and Dot Dumuid
+Maintainer: Ty Stanford <tystan@gmail.com>
+Description: Behaviour change Shiny app with
+    dynamic changes in drop down choices.
+Depends: R (>= 3.5.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: shiny
+RoxygenNote: 7.1.1
