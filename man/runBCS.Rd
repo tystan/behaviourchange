@@ -10,8 +10,7 @@ runBCS()
 Run the \code{behaviourchange} Shiny app
 }
 \examples{
-library("behaviourchange")
-runBCS()
+behaviourchange::runBCS()
 
 }
 \author{

@@ -2,7 +2,7 @@
 #' @author Ty Stanford and Dot Dumuid
 #' @description Run the \code{behaviourchange} Shiny app
 #'
-#' @example
+#' @examples
 #' behaviourchange::runBCS()
 #'
 #' @export
