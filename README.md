@@ -12,3 +12,8 @@ devtools::install_github('tystan/behaviourchange') # install package and depende
 library(behaviourchange)                           # load package
 runBCS()                                           # run behaviourchange shiny app
 ```
+
+# Example screenshot
+
+![](https://github.com/tystan/behaviourchange/blob/master/ui-screen.png)
+
