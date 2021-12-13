@@ -17,10 +17,10 @@ ui <- fluidPage(
       ),
 
 
-      conditionalPanel(
-        condition = paste0("input.phys_input != '", non_select, "'"),
-        textOutput("phys_selected")
-      ),
+      # conditionalPanel(
+      #   condition = paste0("input.phys_input != '", non_select, "'"),
+      #   textOutput("phys_selected")
+      # ),
 
       br(),
       br(),
@@ -65,6 +65,13 @@ ui <- fluidPage(
 
         column(
           width = 6,
+
+          br(),
+
+          htmlOutput("txt_output"),
+
+          br(),
+
 
           conditionalPanel(
             condition = audit_output_js,

@@ -4,7 +4,7 @@
 
 
 # change this to enable/disable the verbatim log
-audit_output <- TRUE
+audit_output <- FALSE
 
 
 
@@ -24,6 +24,7 @@ audit_output <- TRUE
 get_phys_func_score <- function() {
 
   poss_scores <- sort(unique(equiv$difference_physical_score))
+  names(poss_scores) <- add_prefix(poss_scores)
   return(c(non_select, poss_scores))
 
 }
@@ -33,10 +34,6 @@ get_behav_list <- function() {
   return(c(non_select, behav_list))
 
 }
-
-
-
-
 
 
 
@@ -155,6 +152,8 @@ get_filtered_values <- function(col_of_interest) {
   }
   filter_vals <- unique(equiv[filter_ii, col_of_interest])
   filter_vals <- filter_vals[order(as.numeric(filter_vals))]
+  names(filter_vals) <-
+    add_prefix_suffix(rep(col_of_interest, length(filter_vals)), filter_vals)
   return(c(non_select, filter_vals))
 
 }
@@ -170,9 +169,116 @@ get_behav_label <- function() {
 }
 
 
+add_prefix <- function(val) {
+  plus_req <- !grepl("^(0$|-|null$)", val)
+  prefixes <- c("", "+")
+  paste0(prefixes[plus_req + 1], val)
+}
+# test_df <- data.frame(
+#   var = c("sleep", "screen_time", "fruit_veg", "ssb"),
+#   val = c("10", "-20", "0.5", "2.0")
+# )
+# add_prefix(test_df$val)
+# add_prefix(c("-20", "0", "0.5", "null"))
+
+add_suffix <- function(var, val) {
+  minut_ii <-
+    var %in% c(
+      "sleep", "self_care", "screen_time", "quiet_time",
+      "physical_activity", "school_related", "domestic_social"
+    )
+  serve_ii <-
+    var %in% c(
+      "fruit_veg", "discretionary_food", "ssb"
+    )
+  # the remainder of options for var are "null" so don't add suffix
+  suffixes <- c("", " minutes", " serves")[minut_ii + 2 * serve_ii + 1]
+  # special case when val is "null" so don't add suffix
+  val_null <- (val == "null")
+  if (sum(val_null) > 0) {
+    suffixes[val_null] <- ""
+  }
+  paste0(val, suffixes)
+}
+# add_suffix(test_df$var, test_df$val)
+# add_suffix(c("ssb", "physical_activity"), c("0", "null"))
+
+add_prefix_suffix <- function(var, val) {
+  add_suffix(var, add_prefix(val))
+}
+# add_prefix_suffix(test_df$var, test_df$val)
+# add_prefix_suffix(c("ssb", "physical_activity"), c("0", "null"))
 
 
+mk_html_text_selections <- function() {
 
+  selections_df_tmp <- reac_list$selections_df
+  selections_df_tmp <- selections_df_tmp[selections_df_tmp$val != "null", ]
+  n_sel <- nrow(selections_df_tmp)
+
+  if (n_sel < 1) {
+    return("")
+  }
+
+  # check phys score selected
+  out_str_vec <- NULL
+  phys_row <- selections_df_tmp$var %in% "difference_physical_score"
+  if (!any(phys_row)) {
+    return("") # no phys score selected
+  } else {
+    out_str_vec <-
+      c(
+        out_str_vec,
+        paste(
+          "You have chosen a",
+          mk_col_html_text(add_prefix(selections_df_tmp$val[phys_row])),
+          "difference in <strong>Physical Functioning Score:</strong><br><br>"
+        )
+      )
+    selections_df_tmp <- selections_df_tmp[!phys_row, ]
+  }
+
+  if (n_sel > 1) {
+    out_str_vec <- c(out_str_vec, "<ul>")
+
+    out_str_vec <-
+      c(
+        out_str_vec,
+        paste0(
+          "<li>and to change <strong>",
+          get_behav_nms(selections_df_tmp$var),
+          "</strong> by ",
+          mk_col_html_text(add_prefix_suffix(selections_df_tmp$var, selections_df_tmp$val)),
+          "</li>"
+        )
+      )
+
+    out_str_vec <- c(out_str_vec, "</ul>")
+  }
+
+  return(out_str_vec)
+  # return(paste(out_str_vec, collapse = "\n"))
+
+}
+
+mk_col_html_text <- function(x) {
+  neg_vals <- grepl('^-', x)
+  x[neg_vals] <- paste0('<strong style="color:red;">', x[neg_vals], "</strong>")
+  pos_vals <- grepl('^\\+', x)
+  x[pos_vals] <- paste0('<strong style="color:green;">', x[pos_vals], "</strong>")
+  return(x)
+}
+
+get_behav_nms <- function(behav) {
+  list_to_check <- c(non_select, behav_list)
+  found_in_list <- list_to_check %in% behav
+  if (sum(found_in_list) < 1) {
+    stop("Behavour name not found")
+  } else {
+    sub_list <- list_to_check[found_in_list]
+    return(names(sub_list))
+  }
+}
 
 # ---- constants ----
 
@@ -197,9 +303,6 @@ behav_list <-
 
 phys_func_scores <- get_phys_func_score()
 behavs <- get_behav_list()
-
-
-
 
 
 

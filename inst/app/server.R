@@ -27,13 +27,13 @@ server <- function(input, output, session) {
   })
 
 
-  output$phys_selected <- renderText({
-    paste(
-      "You have chosen a",
-      phys_select(),
-      "difference in Physical functioning score.\n\n"
-    )
-  })
+  # output$phys_selected <- renderText({
+  #   paste(
+  #     "You have chosen a",
+  #     phys_select(),
+  #     "difference in Physical Functioning Score.\n\n"
+  #   )
+  # })
 
 
   behav1_select <- reactive({
@@ -98,6 +98,10 @@ server <- function(input, output, session) {
     get_selections_df()
   })
 
+  output$txt_output <- renderUI({
+    HTML(mk_html_text_selections())
+  })
+
 
   observeEvent(input$rset, {
 
@@ -127,7 +131,7 @@ server <- function(input, output, session) {
 
   })
 
-  outputOptions(output, "phys_selected", suspendWhenHidden = FALSE)
+  # outputOptions(output, "phys_selected", suspendWhenHidden = FALSE)
   outputOptions(output, "audit", suspendWhenHidden = FALSE)
 
 }
