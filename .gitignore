@@ -4,10 +4,13 @@
 
 # Session Data files
 .RData
-*\.Rproj
 
 # User-specific files
 .Ruserdata
+
+# shinnyapp.io files
+inst/app/rsconnect/*
+inst/app/equiv.RData
 
 # Example code in package build process
 *-Ex.R

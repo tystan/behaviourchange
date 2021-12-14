@@ -15,7 +15,7 @@ audit_output <- FALSE
 ### NOTE: as lazyloading == TRUE, data `equiv` auto loaded
 # data(equiv) # load data
 # cat(getwd())
-# load("../../data/equiv.RData")
+# load("equiv.RData")
 
 
 # ---- funcs ----
@@ -23,7 +23,8 @@ audit_output <- FALSE
 
 get_phys_func_score <- function() {
 
-  poss_scores <- sort(unique(equiv$difference_physical_score))
+  poss_scores <- unique(equiv$difference_physical_score)
+  poss_scores <- poss_scores[order(as.numeric(poss_scores))]
   names(poss_scores) <- add_prefix(poss_scores)
   return(c(non_select, poss_scores))
 
@@ -43,9 +44,7 @@ rm_elements_behav <- function(rm_behav) {
 
 }
 
-get_behav_nm <- function(behav_var) {
-  return(names(behavs)[behavs == behav_var])
-}
+
 
 
 selections_df_init <-
@@ -269,16 +268,41 @@ mk_col_html_text <- function(x) {
   return(x)
 }
 
+# get_behav_nm <- function(behav_var) {
+#   return(names(behavs)[behavs == behav_var])
+# }
+
 get_behav_nms <- function(behav) {
+
   list_to_check <- c(non_select, behav_list)
-  found_in_list <- list_to_check %in% behav
-  if (sum(found_in_list) < 1) {
-    stop("Behavour name not found")
-  } else {
-    sub_list <- list_to_check[found_in_list]
-    return(names(sub_list))
+  if (!all(behav %in% list_to_check)) {
+    stop("Not all behavour name(s) found")
   }
+
+  n_b <- length(behav)
+  which_in_list <- rep(0, n_b)
+  for (b in 1:n_b) {
+    whch_tmp <- which(list_to_check %in% behav[b])
+    if (length(whch_tmp) != 1) {
+      stop()
+    }
+    which_in_list[b] <- whch_tmp
+  }
+
+  return(names(list_to_check)[which_in_list])
+
 }
+# bhs <- c(
+#   "sleep", "self_care", "screen_time", "quiet_time",
+#   "physical_activity", "school_related", "domestic_social",
+#   "fruit_veg", "discretionary_food", "ssb"
+#   )
+# set.seed(1234)
+# bhs <- bhs[sample(length(bhs))]
+# cbind(get_behav_nms(bhs), bhs)
+# get_behav_nms("null")
+# get_behav_nms("xyz")
+
 
 # ---- constants ----
 

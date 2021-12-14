@@ -46,7 +46,7 @@ server <- function(input, output, session) {
     updateSelectInput(
       session,
       "change1_input",
-      label =  paste0("By how much do you want to change ", get_behav_nm(b1s), "?"),
+      label =  paste0("By how much do you want to change ", get_behav_nms(b1s), "?"),
       choices = get_filtered_values(b1s),
       selected = non_select
     )
