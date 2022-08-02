@@ -1,7 +1,7 @@
 # behaviourchange
 
 
-Behaviour change Shiny app with dynamic changes in drop down choices.
+Behaviour change Shiny app with dynamic changes in drop down choices to achieve a specific health outcome.
 
 
 # Usage
