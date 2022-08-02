@@ -3,6 +3,8 @@
 
 Behaviour change Shiny app with dynamic changes in drop down choices to achieve a specific health outcome.
 
+Please see the article ["Many different roads lead to Rome: Equivalence of time-use and dietary intake profiles among adolescents"](https://doi-link-tbc.com) by Dumuid et al. (2022) for details.
+
 
 # Usage
 
